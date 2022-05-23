@@ -1,0 +1,8 @@
+.board{
+    justify-content: center;
+}
+
+
+.correctGuess{
+    background-color: green;
+}
