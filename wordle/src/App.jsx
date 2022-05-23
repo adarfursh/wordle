@@ -34,7 +34,7 @@ export function App() {
     document.addEventListener("keydown", (e) => onKeyDownHandler(e));
   }, [activeLetterIndex]);
 
-  const onLegitKeyPress = (e) git remote add origin git@github.com:adarfursh/wordle.git=> {
+  const onLegitKeyPress = (e) => {
     if (e.keyCode < 64 || e.keyCode > 91 || activeLetterIndex === 5) {
       return;
     }
@@ -43,7 +43,7 @@ export function App() {
     // setState(state=>({...state,...{state}[activeRow]}))    
 
     //The issue is somewhere here
-
+    
     setState(state => ({ ...state, [activeRow]: { ...state[activeRow][activeLetterIndex], [activeLetterIndex]: e.key } }));
     console.log(state);
     setActiveLetterIndex(activeLetterIndex + 1);
