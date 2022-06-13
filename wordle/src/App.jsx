@@ -6,13 +6,7 @@ import WordRow from "./components/WordRow";
 export function App() {
   const [activeLetterIndex, setActiveLetterIndex] = useState(0);
   const [activeRow, setActiveRow] = useState(0);
-  const [wordArray, setWordArray] = useState({
-    0: "",
-    1: "",
-    2: "",
-    3: "",
-    4: "",
-  });
+
   const [state, setState] = useState({
     0: { 0: "", 1: "", 2: "", 3: "", 4: "" },
     1: { 0: "", 1: "", 2: "", 3: "", 4: "" },
@@ -31,21 +25,40 @@ export function App() {
   };
 
   useEffect(() => {
-    document.addEventListener("keydown", (e) => onKeyDownHandler(e));
-  }, [activeLetterIndex]);
+    const onKeyDownHandler = (e) => {
+      const eventKeycode = e.keyCode;
+      switch (e.keyCode) {
+        case 13:
+          onEnterKeyPress();
+          break;
+        case 8:
+          onBackspaceKeyPress();
+          break;
+        default:
+          onLegitKeyPress(e);
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDownHandler);
+
+    return () => window.removeEventListener("keydown", onKeyDownHandler);
+  });
 
   const onLegitKeyPress = (e) => {
     if (e.keyCode < 64 || e.keyCode > 91 || activeLetterIndex === 5) {
       return;
     }
-    // setWordArray({ ...wordArray, ...{ [activeLetterIndex]: e.key } });
-    // setState({ ...state[activeRow][activeLetterIndex], ...{ [activeLetterIndex]: e.key } });
-    // setState(state=>({...state,...{state}[activeRow]}))    
 
-    //The issue is somewhere here
-    
-    setState(state => ({ ...state, [activeRow]: { ...state[activeRow][activeLetterIndex], [activeLetterIndex]: e.key } }));
-    console.log(state);
+    setState((state) => {
+      const newWordState = {
+        ...state[activeRow],
+        ...{ [activeLetterIndex]: e.key },
+      };
+
+      return { ...state, ...{ [activeRow]: newWordState } };
+    });
+
     setActiveLetterIndex(activeLetterIndex + 1);
   };
 
@@ -72,41 +85,34 @@ export function App() {
       console.log("U guessed it");
       return;
     }
-    setState({ ...state, ...{ [activeRow]: wordArray } });
-
     setActiveRow(activeRow + 1);
-    setWordArray({
-      0: "",
-      1: "",
-      2: "",
-      3: "",
-      4: "",
-    });
   };
 
-  const onKeyDownHandler = (e) => {
-    const eventKeycode = e.keyCode;
-    switch (e.keyCode) {
-      case 13:
-        onEnterKeyPress();
-        break;
-      case 8:
-        onBackspaceKeyPress();
-        break;
-      // case (e.keyCode > 64 && e.keyCode < 91):
-      default:
-        onLegitKeyPress(e);
-        break;
+  const compareWords = (object1, object2) => {
+    const keys1 = Object.keys(object1);
+    const keys2 = Object.keys(object2);
+    
+    for (let key in keys1) {
+      if (object1[key] !== object2[key]) {
+        console.log(object2[key] + '  wrong')
+        
+      }
     }
   };
 
   const onEnterKeyPress = () => {
-    console.log("enter");
-    if (activeLetterIndex !== 5) {
-      return;
+    //Check if current row is full
+    const currentWord = state[activeRow];
+    const stringDailyWord = JSON.stringify(dailyWord);
+    const stringCurrentRow = JSON.stringify(currentWord);
+    if (stringDailyWord === stringCurrentRow) {
+      console.log("won game");
+    } else {
+      compareWords(dailyWord, currentWord);
+      setActiveRow(activeRow + 1);
+      setActiveLetterIndex(0);
     }
 
-    // setActiveRow(activeRow + 1)
     if (activeRow === 5) {
       return;
       // Stop the game and count as lost
@@ -122,11 +128,10 @@ export function App() {
     <div className="App">
       <Context.Provider
         value={{
-          wordArray,
-          setWordArray,
           activeRow,
           activeLetterIndex,
           state,
+          dailyWord,
         }}
       >
         <Header />

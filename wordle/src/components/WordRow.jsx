@@ -7,22 +7,16 @@ import "./wordrow.css";
 const WordRow = (props) => {
   const appState = useContext(Context);
 
+
+
   return (
     <div className="oneRow">
-      {Object.keys(appState.state[props.id]).map((letter, index) => {
+      {Object.entries(appState.state[props.id]).map( ([index, letter]) => {
         return (
-          <div onClick={() => console.log(appState.state[appState.activeRow][index] )}>
-            <Letter
-              key={index}
-              id={index}
-              value={
-                props.isRowActive && index === appState.activeLetterIndex 
-                  ? appState.state[appState.activeRow][index]
-                  : undefined
-              }
-              rowId={props.id}
-            />
-            </div>
+          <Letter
+            key={`${props.id} + ${index}` }
+            value={ letter }
+          />
         );
       })}
     </div>
