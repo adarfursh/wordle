@@ -12,10 +12,11 @@ const WordRow = (props) => {
   return (
     <div className="oneRow">
       {Object.entries(appState.state[props.id]).map( ([index, letter]) => {
+        
         return (
           <Letter
             key={`${props.id} + ${index}` }
-            value={ letter }
+            value={ letter.toUpperCase() }
           />
         );
       })}

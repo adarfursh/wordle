@@ -24,9 +24,10 @@ export function App() {
     4: "n",
   };
 
+
   useEffect(() => {
     const onKeyDownHandler = (e) => {
-      const eventKeycode = e.keyCode;
+      //Restrict to English
       switch (e.keyCode) {
         case 13:
           onEnterKeyPress();
@@ -87,42 +88,48 @@ export function App() {
     }
     setActiveRow(activeRow + 1);
   };
+  //Check matching letters between objects
+
+  const guessValues = Object.values(state[activeRow]);
+  const dailyWordValues = Object.values(dailyWord);
 
   const compareWords = (object1, object2) => {
-    const keys1 = Object.keys(object1);
-    const keys2 = Object.keys(object2);
-    
-    for (let key in keys1) {
-      if (object1[key] !== object2[key]) {
-        console.log(object2[key] + '  wrong')
-        
+    for (let index = 0; index < object1.length; index++) {
+      console.log(object1[index]);
+      for (let j = 0; j < object2.length; j++) {
+        // if (condition) {
+        //   console.log(object2[index]);
+        // }
       }
     }
   };
 
   const onEnterKeyPress = () => {
-    //Check if current row is full
-    const currentWord = state[activeRow];
-    const stringDailyWord = JSON.stringify(dailyWord);
-    const stringCurrentRow = JSON.stringify(currentWord);
-    if (stringDailyWord === stringCurrentRow) {
-      console.log("won game");
-    } else {
-      compareWords(dailyWord, currentWord);
-      setActiveRow(activeRow + 1);
-      setActiveLetterIndex(0);
-    }
+    const lettersAsArray = Object.values(state[activeRow]).every(
+      (value) => value !== ""
+    );
+    if (lettersAsArray === true) {
+      const currentWord = state[activeRow];
+      const stringDailyWord = JSON.stringify(dailyWord);
+      const stringCurrentRow = JSON.stringify(currentWord);
+      if (stringDailyWord === stringCurrentRow) {
 
-    if (activeRow === 5) {
-      return;
-      // Stop the game and count as lost
+      } else {
+        compareWords(dailyWordValues, guessValues);
+        setActiveRow(activeRow + 1);
+        setActiveLetterIndex(0);
+      }
+
+      if (activeRow === 5) {
+        setTimeout(() => {
+          console.log("Sorry but you lost");
+        }, 1000);
+        //Temp solution to adding extra rows
+        document.location.reload();
+      }
+      checkRow();
     }
-    checkRow();
   };
-
-  const onLastRowEnter = () => {
-    return;
-  }; // Handle end of game
 
   return (
     <div className="App">
