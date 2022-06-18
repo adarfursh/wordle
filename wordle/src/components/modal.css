@@ -1,0 +1,10 @@
+.modal {
+  margin: auto;
+  width: 50%;
+  height: 50vh;
+  text-align: justify;
+  font-size: 4vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

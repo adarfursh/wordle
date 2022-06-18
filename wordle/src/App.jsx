@@ -2,6 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import WordRow from "./components/WordRow";
+import Modal from "./components/Modal";
 
 export function App() {
   const [activeLetterIndex, setActiveLetterIndex] = useState(0);
@@ -23,6 +24,9 @@ export function App() {
     3: "i",
     4: "n",
   };
+
+  const [isGameWon, setIsGameWon] = useState(false);
+  const [isGameLost, setIsGameLost] = useState(false);
 
 
   useEffect(() => {
@@ -81,21 +85,22 @@ export function App() {
 
   const checkRow = () => {
     const dailyWordAsString = Object.values(dailyWord).join("");
-    const guessedWordAsString = Object.values(state[activeRow]);
+    const guessedWordAsString = Object.values(state[activeRow]).join("");
     if (dailyWordAsString === guessedWordAsString) {
-      console.log("U guessed it");
+      setTimeout(() => {
+        setIsGameWon(true);
+      }, 250);
       return;
     }
     setActiveRow(activeRow + 1);
   };
   //Check matching letters between objects
 
-  const guessValues = Object.values(state[activeRow]);
-  const dailyWordValues = Object.values(dailyWord);
+
 
   const compareWords = (object1, object2) => {
     for (let index = 0; index < object1.length; index++) {
-      console.log(object1[index]);
+      // console.log(object1[index]);
       for (let j = 0; j < object2.length; j++) {
         // if (condition) {
         //   console.log(object2[index]);
@@ -108,26 +113,26 @@ export function App() {
     const lettersAsArray = Object.values(state[activeRow]).every(
       (value) => value !== ""
     );
+
     if (lettersAsArray === true) {
+      checkRow();
+
       const currentWord = state[activeRow];
       const stringDailyWord = JSON.stringify(dailyWord);
       const stringCurrentRow = JSON.stringify(currentWord);
       if (stringDailyWord === stringCurrentRow) {
-
       } else {
-        compareWords(dailyWordValues, guessValues);
+        compareWords(Object.values(dailyWord), state[activeRow]);
         setActiveRow(activeRow + 1);
         setActiveLetterIndex(0);
       }
 
       if (activeRow === 5) {
         setTimeout(() => {
-          console.log("Sorry but you lost");
-        }, 1000);
-        //Temp solution to adding extra rows
-        document.location.reload();
+          setIsGameLost(true)
+        }, 250);
+        
       }
-      checkRow();
     }
   };
 
@@ -143,11 +148,19 @@ export function App() {
       >
         <Header />
 
-        <div className="board">
-          {Object.keys(state).map((row, index) => (
-            <WordRow key={index} id={index} isRowActive={index === activeRow} />
-          ))}
-        </div>
+        {isGameWon || isGameLost ? (
+          <Modal isGameLost={isGameLost} />
+        ) : (
+          <div className="board">
+            {Object.keys(state).map((row, index) => (
+              <WordRow
+                key={index}
+                id={index}
+                isRowActive={index === activeRow}
+              />
+            ))}
+          </div>
+        )}
       </Context.Provider>
     </div>
   );
