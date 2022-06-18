@@ -4,7 +4,7 @@ import "./letter.css";
 
 const Letter = (props) => {
   return (
-    <div className="square">
+    <div className={ `square ${props.status}` }>
         {props.value}
     </div>
   );

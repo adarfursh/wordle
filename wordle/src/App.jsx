@@ -25,12 +25,18 @@ export function App() {
     4: "n",
   };
 
+  const dailyWordAsString = Object.values(dailyWord).join("");
+
   const [isGameWon, setIsGameWon] = useState(false);
   const [isGameLost, setIsGameLost] = useState(false);
 
 
   useEffect(() => {
     const onKeyDownHandler = (e) => {
+      if ( ! /[a-zA-Z]/.test( e.key ) ) {
+        return;
+      }
+
       //Restrict to English
       switch (e.keyCode) {
         case 13:
@@ -84,7 +90,6 @@ export function App() {
   };
 
   const checkRow = () => {
-    const dailyWordAsString = Object.values(dailyWord).join("");
     const guessedWordAsString = Object.values(state[activeRow]).join("");
     if (dailyWordAsString === guessedWordAsString) {
       setTimeout(() => {
@@ -93,20 +98,6 @@ export function App() {
       return;
     }
     setActiveRow(activeRow + 1);
-  };
-  //Check matching letters between objects
-
-
-
-  const compareWords = (object1, object2) => {
-    for (let index = 0; index < object1.length; index++) {
-      // console.log(object1[index]);
-      for (let j = 0; j < object2.length; j++) {
-        // if (condition) {
-        //   console.log(object2[index]);
-        // }
-      }
-    }
   };
 
   const onEnterKeyPress = () => {
@@ -122,7 +113,7 @@ export function App() {
       const stringCurrentRow = JSON.stringify(currentWord);
       if (stringDailyWord === stringCurrentRow) {
       } else {
-        compareWords(Object.values(dailyWord), state[activeRow]);
+        // compareWords(Object.values(dailyWord), state[activeRow]);
         setActiveRow(activeRow + 1);
         setActiveLetterIndex(0);
       }
@@ -144,6 +135,7 @@ export function App() {
           activeLetterIndex,
           state,
           dailyWord,
+          dailyWordAsString
         }}
       >
         <Header />
@@ -155,7 +147,7 @@ export function App() {
             {Object.keys(state).map((row, index) => (
               <WordRow
                 key={index}
-                id={index}
+                rowId={index}
                 isRowActive={index === activeRow}
               />
             ))}
