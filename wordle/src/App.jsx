@@ -29,11 +29,13 @@ export function App() {
 
   const [isGameWon, setIsGameWon] = useState(false);
   const [isGameLost, setIsGameLost] = useState(false);
+  const ammountOfWins =parseInt(localStorage.getItem("Games Won"))
+  const ammountOfGames =parseInt(localStorage.getItem("Games Played"))
 
 
   useEffect(() => {
     const onKeyDownHandler = (e) => {
-      if ( ! /[a-zA-Z]/.test( e.key ) ) {
+      if (!/[a-zA-Z]/.test(e.key)) {
         return;
       }
 
@@ -94,12 +96,31 @@ export function App() {
     if (dailyWordAsString === guessedWordAsString) {
       setTimeout(() => {
         setIsGameWon(true);
+        if (localStorage.getItem("Games Won") === null) {
+          localStorage.setItem("Games Won", 1);
+        } else {
+          localStorage.setItem(
+            "Games Won",
+            parseInt(localStorage.getItem("Games Won")) + 1
+          );
+        }
+        addToPlayedGamesAmmount();
       }, 250);
       return;
     }
     setActiveRow(activeRow + 1);
   };
 
+  const addToPlayedGamesAmmount = () => {
+    if (localStorage.getItem("Games Played") === null) {
+      localStorage.setItem("Games Played", 1);
+    } else {
+      localStorage.setItem(
+        "Games Played",
+        parseInt(localStorage.getItem("Games Played")) + 1
+      );
+    }
+  }
   const onEnterKeyPress = () => {
     const lettersAsArray = Object.values(state[activeRow]).every(
       (value) => value !== ""
@@ -120,9 +141,17 @@ export function App() {
 
       if (activeRow === 5) {
         setTimeout(() => {
-          setIsGameLost(true)
+          setIsGameLost(true);
+          if (localStorage.getItem("Games Lost") === null) {
+            localStorage.setItem("Games Lost", 1);
+          } else {
+            localStorage.setItem(
+              "Games Lost",
+              parseInt(localStorage.getItem("Games Lost")) + 1
+            );
+          }
+          addToPlayedGamesAmmount()
         }, 250);
-        
       }
     }
   };
@@ -135,13 +164,13 @@ export function App() {
           activeLetterIndex,
           state,
           dailyWord,
-          dailyWordAsString
+          dailyWordAsString,
         }}
       >
         <Header />
 
         {isGameWon || isGameLost ? (
-          <Modal isGameLost={isGameLost} />
+          <Modal isGameLost={isGameLost} gamesPlayed={localStorage.getItem("Games Played")} />
         ) : (
           <div className="board">
             {Object.keys(state).map((row, index) => (
