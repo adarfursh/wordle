@@ -9,11 +9,15 @@ import "./Header.css";
 const Header = () => {
   return (
     <div className="headerContainer">
+      <div>
         <GiHamburgerMenu></GiHamburgerMenu>
-        <VscQuestion/>
-        <span>Wordle</span>
-      <ImStatsBars></ImStatsBars>
-      <FiSettings></FiSettings>
+        <VscQuestion />
+      </div>
+      <div>Wordle</div>
+      <div>
+        <ImStatsBars></ImStatsBars>
+        <FiSettings></FiSettings>
+      </div>
     </div>
   );
 };

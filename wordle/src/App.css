@@ -1,12 +1,14 @@
-body{
-    font-family: Helvetica Neue;
+body {
+  /* height: 45%; */
+
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
 }
 
-.board{
-    justify-content: center;
-}
-
-
-.correctGuess{
-    background-color: green;
+.board {
+  justify-content: center;
+/* 
+  display: flex;
+  flex-direction: column;
+  margin-left: 20vw;
+  margin-right: 20vw; */
 }

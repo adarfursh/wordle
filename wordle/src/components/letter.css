@@ -1,26 +1,55 @@
-.square {
-    width: 100px;
-    height: 100px;
-    border:solid black 1px;
-    margin:5px;
-    display: flex;
-    justify-content: center;
-    font-size:27px;
-    align-items: center;
-    /* text-align: justify; */
-  }
-  
-  .green {
-    background-color: rgb(11, 84, 11);
-    color: #fff;
-  }
-  .orange {
-    background-color:orange;
-    color: #fff;
-  }
-  .gray {
-    background-color: rgb(51, 51, 51);
-    color: #fff;
-  }
+.square{
+  width: 5vw;
+  height: 8vh;
+  border: solid #d3d6da 1px;
+  border-radius: 15px;
+  margin: 0.3%;
+  display: flex;
+  justify-content: center;
+  font-size: x-large;
+  align-items: center;
+  transition: 500ms;
+  box-shadow: 0 2px #999;
+
+}
+
+.green {
+  background-color: #6aaa64;
+  color: #fff;
+  animation: shake 0.75s;
+
+}
+.orange {
+  background-color: orange;
+  color: #fff;
+  animation: shake 0.75s;
 
   
+}
+.gray {
+  background-color: #787c7e;
+  color: #fff;
+  animation: shake 0.75s;
+
+}
+
+@keyframes shake  {
+  0% { transform: translate(1px, 1px) rotate(0deg); }
+  10% { transform: translate(-1px, -2px) rotate(-1deg); }
+  20% { transform: translate(-3px, 0px) rotate(1deg); }
+  30% { transform: translate(3px, 2px) rotate(0deg); }
+  40% { transform: translate(1px, -1px) rotate(1deg); }
+  50% { transform: translate(-1px, 2px) rotate(-1deg); }
+  60% { transform: translate(-3px, 1px) rotate(0deg); }
+  70% { transform: translate(3px, 1px) rotate(-1deg); }
+  80% { transform: translate(-1px, -1px) rotate(1deg); }
+  90% { transform: translate(1px, 2px) rotate(0deg); }
+  100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+
+@media screen and (max-width: 425px) {
+  .square {
+    width: 15%;
+  }
+}

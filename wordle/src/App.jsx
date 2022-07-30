@@ -4,6 +4,7 @@ import Header from "./components/Header";
 import WordRow from "./components/WordRow";
 import Modal from "./components/Modal";
 
+
 export function App() {
   const [activeLetterIndex, setActiveLetterIndex] = useState(0);
   const [activeRow, setActiveRow] = useState(0);
@@ -16,6 +17,10 @@ export function App() {
     4: { 0: "", 1: "", 2: "", 3: "", 4: "" },
     5: { 0: "", 1: "", 2: "", 3: "", 4: "" },
   });
+
+  const dailyWordsArray =[
+    
+  ]
 
   const dailyWord = {
     0: "d",
@@ -170,7 +175,7 @@ export function App() {
         <Header />
 
         {isGameWon || isGameLost ? (
-          <Modal isGameLost={isGameLost} gamesPlayed={localStorage.getItem("Games Played")} />
+          <Modal isGameLost={isGameLost} gamesPlayed={localStorage.getItem("Games Played")} gamesLost={localStorage.getItem("Games Lost")}gamesWon={localStorage.getItem("Games Won")} />
         ) : (
           <div className="board">
             {Object.keys(state).map((row, index) => (
