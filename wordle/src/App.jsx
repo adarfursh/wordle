@@ -4,10 +4,17 @@ import Header from "./components/Header";
 import WordRow from "./components/WordRow";
 import Modal from "./components/Modal";
 
-
 export function App() {
+  // const dailyWord = {
+  //   0: "d",
+  //   1: "r",
+  //   2: "a",
+  //   3: "i",
+  //   4: "n",
+  // };
   const [activeLetterIndex, setActiveLetterIndex] = useState(0);
   const [activeRow, setActiveRow] = useState(0);
+  const [dailyWordAsString, setDailyWordAsString] = useState("");
 
   const [state, setState] = useState({
     0: { 0: "", 1: "", 2: "", 3: "", 4: "" },
@@ -18,25 +25,21 @@ export function App() {
     5: { 0: "", 1: "", 2: "", 3: "", 4: "" },
   });
 
-  const dailyWordsArray =[
-    
-  ]
-
-  const dailyWord = {
-    0: "d",
-    1: "r",
-    2: "a",
-    3: "i",
-    4: "n",
-  };
-
-  const dailyWordAsString = Object.values(dailyWord).join("");
+  const wordsArray = ["drain", "stain", "train", "house"];
+  const [dailyWord, setDailyWord] = useState();
 
   const [isGameWon, setIsGameWon] = useState(false);
   const [isGameLost, setIsGameLost] = useState(false);
-  const ammountOfWins =parseInt(localStorage.getItem("Games Won"))
-  const ammountOfGames =parseInt(localStorage.getItem("Games Played"))
 
+  // Set daily word
+  useEffect(() => {
+    let randomChosenWord =
+      wordsArray[Math.floor(Math.random() * wordsArray.length)].split("");
+    let objRandom = Object.assign({}, randomChosenWord);
+    setDailyWordAsString(Object.values(objRandom).join(""));
+    setDailyWord(objRandom);
+    return () => {};
+  }, []);
 
   useEffect(() => {
     const onKeyDownHandler = (e) => {
@@ -98,7 +101,8 @@ export function App() {
 
   const checkRow = () => {
     const guessedWordAsString = Object.values(state[activeRow]).join("");
-    if (dailyWordAsString === guessedWordAsString) {
+
+    if (Object.values(dailyWord).join("") === guessedWordAsString) {
       setTimeout(() => {
         setIsGameWon(true);
         if (localStorage.getItem("Games Won") === null) {
@@ -125,7 +129,7 @@ export function App() {
         parseInt(localStorage.getItem("Games Played")) + 1
       );
     }
-  }
+  };
   const onEnterKeyPress = () => {
     const lettersAsArray = Object.values(state[activeRow]).every(
       (value) => value !== ""
@@ -155,7 +159,7 @@ export function App() {
               parseInt(localStorage.getItem("Games Lost")) + 1
             );
           }
-          addToPlayedGamesAmmount()
+          addToPlayedGamesAmmount();
         }, 250);
       }
     }
@@ -175,7 +179,12 @@ export function App() {
         <Header />
 
         {isGameWon || isGameLost ? (
-          <Modal isGameLost={isGameLost} gamesPlayed={localStorage.getItem("Games Played")} gamesLost={localStorage.getItem("Games Lost")}gamesWon={localStorage.getItem("Games Won")} />
+          <Modal
+            isGameLost={isGameLost}
+            gamesPlayed={localStorage.getItem("Games Played")}
+            gamesLost={localStorage.getItem("Games Lost")}
+            gamesWon={localStorage.getItem("Games Won")}
+          />
         ) : (
           <div className="board">
             {Object.keys(state).map((row, index) => (

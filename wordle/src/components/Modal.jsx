@@ -19,7 +19,7 @@ export default function Modal(props) {
                 dx={dx}
                 dy={dy}
                 // dominant-baseline="central"
-                text-anchor="right"
+                // textAnchor="left"
                 style={{
                   fill: "#fff",
                   
