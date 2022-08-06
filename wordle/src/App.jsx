@@ -5,13 +5,6 @@ import WordRow from "./components/WordRow";
 import Modal from "./components/Modal";
 
 export function App() {
-  // const dailyWord = {
-  //   0: "d",
-  //   1: "r",
-  //   2: "a",
-  //   3: "i",
-  //   4: "n",
-  // };
   const [activeLetterIndex, setActiveLetterIndex] = useState(0);
   const [activeRow, setActiveRow] = useState(0);
   const [dailyWordAsString, setDailyWordAsString] = useState("");
@@ -39,6 +32,10 @@ export function App() {
     setDailyWordAsString(Object.values(objRandom).join(""));
     setDailyWord(objRandom);
     return () => {};
+  }, []);
+
+  useEffect(() => {
+    prompt();
   }, []);
 
   useEffect(() => {
