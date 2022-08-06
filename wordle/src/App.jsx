@@ -3,6 +3,7 @@ import "./App.css";
 import Header from "./components/Header";
 import WordRow from "./components/WordRow";
 import Modal from "./components/Modal";
+import { WordArray } from "./components/WordArray";
 
 export function App() {
   const [activeLetterIndex, setActiveLetterIndex] = useState(0);
@@ -18,7 +19,6 @@ export function App() {
     5: { 0: "", 1: "", 2: "", 3: "", 4: "" },
   });
 
-  const wordsArray = ["drain", "stain", "train", "house"];
   const [dailyWord, setDailyWord] = useState();
 
   const [isGameWon, setIsGameWon] = useState(false);
@@ -26,14 +26,16 @@ export function App() {
 
   // Set daily word
   useEffect(() => {
-    let randomChosenWord =
-      wordsArray[Math.floor(Math.random() * wordsArray.length)].split("");
+    const lowerCased = WordArray.map(word => word.toLowerCase());
+
+    let randomChosenWord = lowerCased[Math.floor(Math.random() * 16)].split("");
+
     let objRandom = Object.assign({}, randomChosenWord);
-    setDailyWordAsString(Object.values(objRandom).join(""));
+    let joinedWord = Object.values(objRandom).join("");
+    setDailyWordAsString(joinedWord);
     setDailyWord(objRandom);
     return () => {};
   }, []);
-
 
   useEffect(() => {
     const onKeyDownHandler = (e) => {
