@@ -35,7 +35,7 @@ export function App() {
   }, []);
 
   useEffect(() => {
-    prompt();
+    window.focus()
   }, []);
 
   useEffect(() => {
