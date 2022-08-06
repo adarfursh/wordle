@@ -4,6 +4,8 @@ import Header from "./components/Header";
 import WordRow from "./components/WordRow";
 import Modal from "./components/Modal";
 import { WordArray } from "./components/WordArray";
+import Keyboard from "react-simple-keyboard";
+import "react-simple-keyboard/build/css/index.css";
 
 export function App() {
   const [activeLetterIndex, setActiveLetterIndex] = useState(0);
@@ -26,7 +28,7 @@ export function App() {
 
   // Set daily word
   useEffect(() => {
-    const lowerCased = WordArray.map(word => word.toLowerCase());
+    const lowerCased = WordArray.map((word) => word.toLowerCase());
 
     let randomChosenWord = lowerCased[Math.floor(Math.random() * 16)].split("");
 
@@ -190,6 +192,9 @@ export function App() {
                 isRowActive={index === activeRow}
               />
             ))}
+            <Keyboard
+
+            />
           </div>
         )}
       </Context.Provider>
