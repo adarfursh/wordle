@@ -34,9 +34,6 @@ export function App() {
     return () => {};
   }, []);
 
-  useEffect(() => {
-    window.focus()
-  }, []);
 
   useEffect(() => {
     const onKeyDownHandler = (e) => {
