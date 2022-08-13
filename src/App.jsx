@@ -1,14 +1,20 @@
-import React, { useState, useEffect, createContext } from "react";
+import React, { useState, useEffect, createContext, useRef } from "react";
 import "./App.css";
 import Header from "./components/Header";
 import WordRow from "./components/WordRow";
 import Modal from "./components/Modal";
 import { WordArray } from "./components/WordArray";
+import Keyboard from "react-simple-keyboard";
+import "react-simple-keyboard/build/css/index.css";
 
 export function App() {
   const [activeLetterIndex, setActiveLetterIndex] = useState(0);
   const [activeRow, setActiveRow] = useState(0);
   const [dailyWordAsString, setDailyWordAsString] = useState("");
+
+  // const [input, setInput] = useState("");
+  // const [layout, setLayout] = useState("default");
+  const keyboard = useRef();
 
   const [state, setState] = useState({
     0: { 0: "", 1: "", 2: "", 3: "", 4: "" },
@@ -24,11 +30,40 @@ export function App() {
   const [isGameWon, setIsGameWon] = useState(false);
   const [isGameLost, setIsGameLost] = useState(false);
 
+
+  const onKeyPress = (e) => {
+    let virtualKey = e.toUpperCase();
+    let keycode = virtualKey.charCodeAt(0);
+
+    //Input on virtual keyboard is lower case by default. To get accurate keycode I had to use toUpperCase.
+    if (keycode < 64 || keycode > 91 || activeLetterIndex === 5) {
+      return;
+    } else {
+      setState((state) => {
+
+        const newWordState = {
+          ...state[activeRow],
+          ...{ [activeLetterIndex]: e },
+        };
+
+        return { ...state, ...{ [activeRow]: newWordState } };
+      });
+      setActiveLetterIndex(activeLetterIndex + 1);
+    }
+  };
+
+  // const onChangeInput = (event) => {
+  //   const input = event.target.value;
+  //   // setInput(input);
+  //   keyboard.current.setInput(input);
+  // };
+
   // Set daily word
   useEffect(() => {
-    const lowerCased = WordArray.map(word => word.toLowerCase());
+    const lowerCased = WordArray.map((word) => word.toLowerCase());
 
-    let randomChosenWord = lowerCased[Math.floor(Math.random() * 16)].split("");
+    let randomChosenWord =
+      lowerCased[Math.floor(Math.random() * lowerCased.length)].split("");
 
     let objRandom = Object.assign({}, randomChosenWord);
     let joinedWord = Object.values(objRandom).join("");
@@ -36,27 +71,25 @@ export function App() {
     setDailyWord(objRandom);
     return () => {};
   }, []);
+  const onKeyDownHandler = (e) => {
+    if (!/[a-zA-Z]/.test(e.key)) {
+      return;
+    }
 
+    //Restrict to English
+    switch (e.keyCode) {
+      case 13:
+        onEnterKeyPress();
+        break;
+      case 8:
+        onBackspaceKeyPress();
+        break;
+      default:
+        onLegitKeyPress(e);
+        break;
+    }
+  };
   useEffect(() => {
-    const onKeyDownHandler = (e) => {
-      if (!/[a-zA-Z]/.test(e.key)) {
-        return;
-      }
-
-      //Restrict to English
-      switch (e.keyCode) {
-        case 13:
-          onEnterKeyPress();
-          break;
-        case 8:
-          onBackspaceKeyPress();
-          break;
-        default:
-          onLegitKeyPress(e);
-          break;
-      }
-    };
-
     window.addEventListener("keydown", onKeyDownHandler);
 
     return () => window.removeEventListener("keydown", onKeyDownHandler);
@@ -180,6 +213,7 @@ export function App() {
             gamesPlayed={localStorage.getItem("Games Played")}
             gamesLost={localStorage.getItem("Games Lost")}
             gamesWon={localStorage.getItem("Games Won")}
+            state={state}
           />
         ) : (
           <div className="board">
@@ -190,6 +224,16 @@ export function App() {
                 isRowActive={index === activeRow}
               />
             ))}
+            <Keyboard
+              keyboardRef={(r) => (keyboard.current = r)}
+              // layoutName={layout}
+              // onChange={onChange}
+              onKeyPress={onKeyPress}
+              excludeFromLayout={{
+                'default':["`","@", ".com","{shift}","{lock}","{tab}","-","=",";","[","]","'",",",".","/","\\"]
+                
+              }}
+            />
           </div>
         )}
       </Context.Provider>
