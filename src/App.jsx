@@ -30,17 +30,22 @@ export function App() {
   const [isGameWon, setIsGameWon] = useState(false);
   const [isGameLost, setIsGameLost] = useState(false);
 
-
   const onKeyPress = (e) => {
     let virtualKey = e.toUpperCase();
     let keycode = virtualKey.charCodeAt(0);
 
+    if (virtualKey === "{BKSP}") {
+      onBackspaceKeyPress();
+    }
+    //Virtual keyboard Enter handler
+    if (keycode === 123) {
+      onEnterKeyPress();
+    }
     //Input on virtual keyboard is lower case by default. To get accurate keycode I had to use toUpperCase.
     if (keycode < 64 || keycode > 91 || activeLetterIndex === 5) {
       return;
     } else {
       setState((state) => {
-
         const newWordState = {
           ...state[activeRow],
           ...{ [activeLetterIndex]: e },
@@ -113,6 +118,7 @@ export function App() {
   };
 
   const onBackspaceKeyPress = () => {
+    
     if (activeLetterIndex === 0) {
       return;
     }
@@ -230,8 +236,24 @@ export function App() {
               // onChange={onChange}
               onKeyPress={onKeyPress}
               excludeFromLayout={{
-                'default':["`","@", ".com","{shift}","{lock}","{tab}","-","=",";","[","]","'",",",".","/","\\"]
-                
+                default: [
+                  "`",
+                  "@",
+                  ".com",
+                  "{shift}",
+                  "{lock}",
+                  "{tab}",
+                  "-",
+                  "=",
+                  ";",
+                  "[",
+                  "]",
+                  "'",
+                  ",",
+                  ".",
+                  "/",
+                  "\\",
+                ],
               }}
             />
           </div>
