@@ -34,13 +34,17 @@ export function App() {
     let virtualKey = e.toUpperCase();
     let keycode = virtualKey.charCodeAt(0);
 
-    if (virtualKey === "{BKSP}") {
-      onBackspaceKeyPress();
+    switch (virtualKey) {
+      case "{ENTER}":
+        onEnterKeyPress();
+        break;
+      case "{BKSP}":
+        onBackspaceKeyPress();
+        break;
+      default:
+
     }
-    //Virtual keyboard Enter handler
-    if (keycode === 123) {
-      onEnterKeyPress();
-    }
+
     //Input on virtual keyboard is lower case by default. To get accurate keycode I had to use toUpperCase.
     if (keycode < 64 || keycode > 91 || activeLetterIndex === 5) {
       return;
@@ -57,11 +61,6 @@ export function App() {
     }
   };
 
-  // const onChangeInput = (event) => {
-  //   const input = event.target.value;
-  //   // setInput(input);
-  //   keyboard.current.setInput(input);
-  // };
 
   // Set daily word
   useEffect(() => {
