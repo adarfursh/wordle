@@ -42,7 +42,6 @@ export function App() {
         onBackspaceKeyPress();
         break;
       default:
-
     }
 
     //Input on virtual keyboard is lower case by default. To get accurate keycode I had to use toUpperCase.
@@ -60,7 +59,6 @@ export function App() {
       setActiveLetterIndex(activeLetterIndex + 1);
     }
   };
-
 
   // Set daily word
   useEffect(() => {
