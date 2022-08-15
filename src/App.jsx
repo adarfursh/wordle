@@ -118,7 +118,6 @@ export function App() {
   };
 
   const onBackspaceKeyPress = () => {
-    
     if (activeLetterIndex === 0) {
       return;
     }
@@ -253,6 +252,16 @@ export function App() {
                   ".",
                   "/",
                   "\\",
+                  "1",
+                  "2",
+                  "3",
+                  "4",
+                  "5",
+                  "6",
+                  "7",
+                  "8",
+                  "9",
+                  "0",
                 ],
               }}
             />
