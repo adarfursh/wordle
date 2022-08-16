@@ -12,8 +12,12 @@ export function App() {
   const [activeRow, setActiveRow] = useState(0);
   const [dailyWordAsString, setDailyWordAsString] = useState("");
 
-  // const [input, setInput] = useState("");
-  // const [layout, setLayout] = useState("default");
+
+  const excludeFromLayout = {
+    shift: [
+      "~",
+      ,"!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", "{tab}", "{", "}", "|", "{shift}", "<", ">", "?", ".com", "{lock}", ":", '"', "space"],
+  };
   const keyboard = useRef();
 
   const [state, setState] = useState({
@@ -30,28 +34,29 @@ export function App() {
   const [isGameWon, setIsGameWon] = useState(false);
   const [isGameLost, setIsGameLost] = useState(false);
 
-  const onKeyPress = (e) => {
-    let virtualKey = e.toUpperCase();
-    let keycode = virtualKey.charCodeAt(0);
+  const [statsClicked, setStatsClicked] = useState(false);
 
-    switch (virtualKey) {
-      case "{ENTER}":
+  const onKeyPress = (e) => {
+    console.log(e);
+    let keycode = e.charCodeAt(0);
+
+    switch (e) {
+      case "{enter}":
         onEnterKeyPress();
         break;
-      case "{BKSP}":
+      case "{bksp}":
         onBackspaceKeyPress();
         break;
       default:
     }
 
-    //Input on virtual keyboard is lower case by default. To get accurate keycode I had to use toUpperCase.
     if (keycode < 64 || keycode > 91 || activeLetterIndex === 5) {
       return;
     } else {
       setState((state) => {
         const newWordState = {
           ...state[activeRow],
-          ...{ [activeLetterIndex]: e },
+          ...{ [activeLetterIndex]: e.toLowerCase() },
         };
 
         return { ...state, ...{ [activeRow]: newWordState } };
@@ -101,7 +106,6 @@ export function App() {
     if (e.keyCode < 64 || e.keyCode > 91 || activeLetterIndex === 5) {
       return;
     }
-
     setState((state) => {
       const newWordState = {
         ...state[activeRow],
@@ -205,11 +209,13 @@ export function App() {
           state,
           dailyWord,
           dailyWordAsString,
+          statsClicked,
+          setStatsClicked,
         }}
       >
         <Header />
 
-        {isGameWon || isGameLost ? (
+        {statsClicked || isGameWon || isGameLost ? (
           <Modal
             isGameLost={isGameLost}
             gamesPlayed={localStorage.getItem("Games Played")}
@@ -228,39 +234,16 @@ export function App() {
             ))}
             <Keyboard
               keyboardRef={(r) => (keyboard.current = r)}
-              // layoutName={layout}
-              // onChange={onChange}
               onKeyPress={onKeyPress}
-              excludeFromLayout={{
-                default: [
-                  "`",
-                  "@",
-                  ".com",
-                  "{shift}",
-                  "{lock}",
-                  "{tab}",
-                  "-",
-                  "=",
-                  ";",
-                  "[",
-                  "]",
-                  "'",
-                  ",",
-                  ".",
-                  "/",
-                  "\\",
-                  "1",
-                  "2",
-                  "3",
-                  "4",
-                  "5",
-                  "6",
-                  "7",
-                  "8",
-                  "9",
-                  "0",
-                ],
+              physicalKeyboardHighlight={true}
+              physicalKeyboardHighlightBgColor="#4681f4"
+              display={{
+                "{bksp}": "Backspace",
+                "{enter}": "ENTER",
               }}
+              //In addition I used The shift layout to only get Capital letters let
+              layoutName={"shift"}
+              excludeFromLayout={excludeFromLayout}
             />
           </div>
         )}
