@@ -241,7 +241,7 @@ export function App() {
                 "{bksp}": "Backspace",
                 "{enter}": "ENTER",
               }}
-              //In addition I used The shift layout to only get Capital letters let
+              //Used The shift layout to only get Capital letters 
               layoutName={"shift"}
               excludeFromLayout={excludeFromLayout}
             />
